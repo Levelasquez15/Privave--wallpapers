@@ -1,0 +1,7 @@
+{
+  "name": "privateWallpapers",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
