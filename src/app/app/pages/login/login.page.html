@@ -1,14 +1,16 @@
 <ion-content>
   <div class="login-card">
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <app-input [formControl]="loginForm.get('email')!" type="email" label="Email">
-</app-input>
-<app-input [formControl]="loginForm.get('password')!" type="password" label="Password">
-</app-input>
-      <app-link text="Create an account" [routerLink]="['/register']">
-      </app-link>
-      <app-button text="Login" type="submit" [disabled]="loginForm.invalid">
-      </app-button>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <app-link text="Create an account" [routerLink]="['/register']"></app-link>
+      <app-button text="Login" type="submit" [disabled]="loginForm.invalid"></app-button>
       <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
     </form>
   </div>
