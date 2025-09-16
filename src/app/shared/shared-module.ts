@@ -8,6 +8,8 @@ import { LinkComponent } from './components/link/link.component';
 import { ToggleTranslateComponent } from './components/toggle-translate/toggle-translate.component';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
+import { CoreModule } from '../core/core-module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -21,13 +23,15 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   exports: [
     InputComponent,
     ButtonComponent,
     LinkComponent,
     ToggleTranslateComponent,
+    TranslateModule
     
   ]
 })

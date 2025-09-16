@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from 'src/app/core/services/translate';
 
 @Component({
   selector: 'app-toggle-translate',
@@ -16,8 +16,8 @@ export class ToggleTranslateComponent implements OnInit {
     this.currentLang = this.translate.currentLang || 'en';
   }
 
-  setLang(lang: string) {
-    this.translate.use(lang);
-    this.currentLang = lang;
-  }
+ setLang(lang: string) {
+  this.translate.setLanguage(lang);
+  this.currentLang = lang;
+}
 }

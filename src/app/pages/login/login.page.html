@@ -1,0 +1,20 @@
+<ion-content>
+  <div class="login-card">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <ion-item>
+        <ion-label position="floating">{{ 'LOGIN.EMAIL' | translate }}</ion-label>
+        <ion-input type="email" formControlName="email" placeholder="zazad@doe.com"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">{{ 'LOGIN.PASSWORD' | translate }}</ion-label>
+        <ion-input type="password" formControlName="password" placeholder="********"></ion-input>
+      </ion-item>
+      <div class="extra-options">
+        <app-link [text]="'LOGIN.REGISTER' | translate" [routerLink]="['/register']"></app-link>
+        <app-toggle-translate></app-toggle-translate>
+      </div>
+      <app-button [text]="'LOGIN.BUTTON' | translate" type="submit" [disabled]="loginForm.invalid"></app-button>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+</ion-content>

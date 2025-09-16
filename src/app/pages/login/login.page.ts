@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class LoginPage implements OnInit {
   loginForm!: FormGroup;
