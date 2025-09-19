@@ -33,4 +33,7 @@ export class AuthService {
     }
     return Promise.reject('No hay usuario autenticado');
   }
+  isAuthenticated(): boolean {
+    return this.auth.currentUser != null;
+  }
 }

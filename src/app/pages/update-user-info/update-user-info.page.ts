@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth';
 import { Query } from 'src/app/core/services/query';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-update-user-info',
@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class UpdateUserInfoPage implements OnInit {
   profileForm!: FormGroup;
   errorMsg: string = '';
+  successMsg: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -21,45 +22,74 @@ export class UpdateUserInfoPage implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.profileForm = this.fb.group({
       name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
     });
 
-    // Aquí puedes cargar los datos actuales del usuario si lo necesitas
+    const { getAuth } = await import('@angular/fire/auth');
+    const user = getAuth().currentUser;
+
+    if (user) {
+      let userDoc = await this.query.getUser(user.uid);
+
+      if (userDoc) {
+        this.profileForm.patchValue({
+          name: userDoc?.['name'] ?? '',
+          lastName: userDoc?.['lastName'] ?? '',
+          email: userDoc?.['email'] ?? user.email ?? ''
+        });
+      } else {
+        // Si no existe documento en Firestore, lo crea
+        const userData = {
+          name: '',
+          lastName: '',
+          email: user.email ?? '',
+          uid: user.uid
+        };
+        await this.query.create('users', userData);
+
+        userDoc = await this.query.getUser(user.uid);
+        if (userDoc) {
+          this.profileForm.patchValue({
+            name: userDoc?.['name'] ?? '',
+            lastName: userDoc?.['lastName'] ?? '',
+            email: userDoc?.['email'] ?? user.email ?? ''
+          });
+        }
+      }
+    }
   }
 
   async onUpdate() {
-    const { name, lastname, email, password, confirmPassword } = this.profileForm.value;
-
-    if (password !== confirmPassword) {
-      this.errorMsg = 'Las contraseñas no coinciden';
-      return;
-    }
-    
+    const { name, lastName } = this.profileForm.value;
 
     try {
-      // Actualiza en autenticación (email y password)
-      await this.auth.updateEmail(email);
-      await this.auth.updatePassword(password);
+      const { getAuth } = await import('@angular/fire/auth');
+      const user = getAuth().currentUser;
 
-      // Actualiza en Firestore
-      const userData = { name, lastName: lastname, email };
-      await this.query.updateUser(userData);
+      if (user) {
+        const userData = {
+          name,
+          lastName,
+          uid: user.uid
+        };
+        await this.query.updateUser(userData);
+      }
 
       this.errorMsg = '';
-      // Puedes mostrar mensaje de éxito o redirigir
+      this.successMsg = '✅ Datos actualizados correctamente';
     } catch (err: any) {
+      console.error(err);
       this.errorMsg = err.message || 'Error al actualizar';
     }
   }
+
   onLogout() {
-  this.auth.logout().then(() => {
-    this.router.navigate(['/login']);
-  });
-}
+    this.auth.logout().then(() => {
+      this.router.navigate(['/login']);
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth'; // <-- importa tu servicio de auth
 
 @Component({
   selector: 'app-home',
@@ -10,22 +11,29 @@ import { Router } from '@angular/router';
 export class HomePage implements OnInit {
   showSuccess = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+     private authService: AuthService, // <-- inyecta el servicio
+  ) { }
 
   ngOnInit() {}
 
   onProfileClick() {
-    // Navegar a la página de actualización de usuario
     this.router.navigate(['/update-user-info']);
   }
 
   onAddWallpaperClick() {
-    // Acción para agregar fondo
     this.showSuccess = true;
     setTimeout(() => this.showSuccess = false, 2000);
   }
 
-  onLogoutClick() {
-    // Acción para desloguear
+  // 👇 aquí ya es async
+  async onLogoutClick() {
+    try {
+      await this.authService.logout(); // <-- usa el servicio de logout
+      this.router.navigate(['/login']); // redirige al login
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   }
 }
