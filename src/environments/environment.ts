@@ -5,14 +5,16 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_MESSAGING_SENDER_ID",
-    appId: "TU_APP_ID"
+  apiKey: "AIzaSyC1piNfF8o_9ea7vmry7cr58kpisJ_omQM",
+  authDomain: "privave--wallpapers.firebaseapp.com",
+  projectId: "privave--wallpapers",
+  storageBucket: "privave--wallpapers.firebasestorage.app",
+  messagingSenderId: "737699641295",
+  appId: "1:737699641295:web:644d1b26d698973b3644ba",
+  measurementId: "G-1MJB09YV61"
   }
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

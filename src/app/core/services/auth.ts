@@ -1,18 +1,36 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from '@angular/fire/auth';
+import { inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Auth {
-  constructor(private afAuth: AngularFireAuth) {}
+export class AuthService {
+  private auth = inject(Auth);
 
-  async login(email: string, password: string): Promise<boolean> {
-    try {
-      await this.afAuth.signInWithEmailAndPassword(email, password);
-      return true;
-    } catch (error) {
-      return false;
+  register(email: string, password: string) {
+    return createUserWithEmailAndPassword(this.auth, email, password);
+  }
+
+  login(email: string, password: string) {
+    return signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  logout() {
+    return signOut(this.auth);
+  }
+
+  updateEmail(newEmail: string) {
+    if (this.auth.currentUser) {
+      return updateEmail(this.auth.currentUser, newEmail);
     }
+    return Promise.reject('No hay usuario autenticado');
+  }
+
+  updatePassword(newPassword: string) {
+    if (this.auth.currentUser) {
+      return updatePassword(this.auth.currentUser, newPassword);
+    }
+    return Promise.reject('No hay usuario autenticado');
   }
 }
