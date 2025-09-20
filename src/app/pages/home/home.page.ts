@@ -19,7 +19,7 @@ export class HomePage implements OnInit {
   ngOnInit() {}
 
   onProfileClick() {
-    this.router.navigate(['/update-user-info']);
+    this.router.navigate(['/update-user-info'], { state: { fromHome: true } });
   }
 
   onAddWallpaperClick() {

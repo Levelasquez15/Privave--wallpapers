@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth-guard';
+import { UpdateUserInfoGuard } from './core/guards/update-user-info-guard';
+
 
 const routes: Routes = [
   {
@@ -10,6 +13,7 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
+    
   },
   {
     path: 'register',
@@ -17,11 +21,13 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule),
+    canActivate: [AuthGuard] 
   },
   {
     path: 'update-user-info',
-    loadChildren: () => import('./pages/update-user-info/update-user-info.module').then(m => m.UpdateUserInfoPageModule)
+    loadChildren: () => import('./pages/update-user-info/update-user-info.module').then(m => m.UpdateUserInfoPageModule),
+    canActivate: [UpdateUserInfoGuard] 
   },
   
 ];
