@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
 import { AuthService } from 'src/app/core/services/auth';
 import { Query } from 'src/app/core/services/query';
 
@@ -19,7 +20,8 @@ export class UpdateUserInfoPage implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private query: Query,
-    private router: Router
+    private router: Router,
+    private ngAuth: Auth   // 🔹 inyecta el Auth de Firebase aquí
   ) {}
 
   async ngOnInit() {
@@ -29,8 +31,7 @@ export class UpdateUserInfoPage implements OnInit {
       email: ['', [Validators.required, Validators.email]]
     });
 
-    const { getAuth } = await import('@angular/fire/auth');
-    const user = getAuth().currentUser;
+    const user = this.ngAuth.currentUser; // ✅ en vez de getAuth()
 
     if (user) {
       let userDoc = await this.query.getUser(user.uid);
@@ -67,8 +68,7 @@ export class UpdateUserInfoPage implements OnInit {
     const { name, lastName } = this.profileForm.value;
 
     try {
-      const { getAuth } = await import('@angular/fire/auth');
-      const user = getAuth().currentUser;
+      const user = this.ngAuth.currentUser; // ✅ igual aquí
 
       if (user) {
         const userData = {

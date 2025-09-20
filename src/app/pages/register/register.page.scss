@@ -1,0 +1,23 @@
+.register-card {
+  max-width: 400px;         
+  margin: auto;              
+  margin-top: 18vh;          
+  padding: 20px;            
+  background: #fff;        
+  border-radius: 12px;       
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); 
+}
+
+.extra-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.error-msg {
+  margin-top: 12px;
+  color: var(--ion-color-danger);
+  text-align: center;
+  font-size: 14px;
+}

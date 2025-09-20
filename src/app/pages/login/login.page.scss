@@ -1,10 +1,13 @@
 .login-card {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  margin: 40px 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  max-width: 400px;       
+  margin: auto;           
+  margin-top: 18vh;       
   padding: 24px;
 }
+
 
 .extra-options {
   margin: 16px 0;
