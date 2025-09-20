@@ -40,6 +40,7 @@ export class SupabaseService {
       .getPublicUrl(path);
     return data.publicUrl;
   }
+  
 
   async listFiles(bucket: string, folder: string = '') {
     const { data, error } = await this.supabase.storage

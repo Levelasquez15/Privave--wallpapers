@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content>
+  <!-- FAB con acciones -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary">
       <ion-icon name="close"></ion-icon>
@@ -22,9 +23,21 @@
     </ion-fab-list>
   </ion-fab>
 
+  <!-- Mensaje de éxito -->
   <div *ngIf="showSuccess" class="success-msg">
     <ion-chip color="success">
       <ion-label>¡Imagen subida con éxito!</ion-label>
     </ion-chip>
   </div>
+
+  <!-- Lista de wallpapers -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let wall of wallpapers">
+        <ion-card>
+          <img [src]="wall" alt="Wallpaper" />
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
