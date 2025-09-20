@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- FAB principal con lista de opciones -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary">
       <ion-icon name="close"></ion-icon>
@@ -23,10 +22,9 @@
     </ion-fab-list>
   </ion-fab>
 
-  <!-- Mensaje de éxito -->
   <div *ngIf="showSuccess" class="success-msg">
     <ion-chip color="success">
-      <ion-label>Success</ion-label>
+      <ion-label>¡Imagen subida con éxito!</ion-label>
     </ion-chip>
   </div>
 </ion-content>

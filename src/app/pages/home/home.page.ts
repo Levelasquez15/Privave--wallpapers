@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth'; // <-- importa tu servicio de auth
+import { AuthService } from '../../core/services/auth';
+import { SupabaseService } from '../../core/services/supabase';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +14,9 @@ export class HomePage implements OnInit {
 
   constructor(
     private router: Router,
-     private authService: AuthService, // <-- inyecta el servicio
-  ) { }
+    private authService: AuthService,
+    private supabaseService: SupabaseService
+  ) {}
 
   ngOnInit() {}
 
@@ -22,16 +24,41 @@ export class HomePage implements OnInit {
     this.router.navigate(['/update-user-info'], { state: { fromHome: true } });
   }
 
-  onAddWallpaperClick() {
-    this.showSuccess = true;
-    setTimeout(() => this.showSuccess = false, 2000);
+  /** Subir un wallpaper */
+  async onAddWallpaperClick() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*'; // solo imágenes
+    input.click();
+
+    input.onchange = async () => {
+      const file = (input.files as FileList)[0];
+      if (!file) return;
+
+      try {
+        // path único dentro del bucket
+        const filePath = `uploads/${Date.now()}-${file.name}`;
+
+        // subir al bucket "wallpapers"
+        await this.supabaseService.uploadImage('wallpapers', filePath, file);
+
+        // obtener URL pública
+        const publicUrl = this.supabaseService.getPublicUrl('wallpapers', filePath);
+        console.log('Imagen subida con éxito. URL pública:', publicUrl);
+
+        this.showSuccess = true;
+        setTimeout(() => (this.showSuccess = false), 2000);
+      } catch (err) {
+        console.error('Error al subir imagen:', err);
+      }
+    };
   }
 
-  // 👇 aquí ya es async
+  /** Cerrar sesión */
   async onLogoutClick() {
     try {
-      await this.authService.logout(); // <-- usa el servicio de logout
-      this.router.navigate(['/login']); // redirige al login
+      await this.authService.logout();
+      this.router.navigate(['/login']);
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
