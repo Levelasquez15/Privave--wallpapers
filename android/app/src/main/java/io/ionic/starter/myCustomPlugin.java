@@ -16,18 +16,18 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@CapacitorPlugin(name = "MyCustomPlugin") // 👈 Debe coincidir con el nombre en myCustomPlugin.ts
+@CapacitorPlugin(name = "MyCustomPlugin")
 public class myCustomPlugin extends Plugin {
 
   @PluginMethod()
   public void setWallpaper(PluginCall call) {
     String imageUrl = call.getString("url");
-    String type = call.getString("type"); // "home", "lock", "both"
+    String type = call.getString("type");
 
     JSObject ret = new JSObject();
 
     try {
-      // Descargar imagen desde la URL
+      // Descargar imagen
       URL url = new URL(imageUrl);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setDoInput(true);
@@ -38,16 +38,21 @@ public class myCustomPlugin extends Plugin {
       WallpaperManager wm = WallpaperManager.getInstance(getContext());
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        if ("home".equals(type)) {
+        int flag = WallpaperManager.FLAG_SYSTEM;
+
+        if ("lock".equals(type)) {
+          flag = WallpaperManager.FLAG_LOCK;
+        } else if ("both".equals(type)) {
           wm.setBitmap(bitmap, null, true, WallpaperManager.FLAG_SYSTEM);
-        } else if ("lock".equals(type)) {
           wm.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
-        } else {
-          wm.setBitmap(bitmap, null, true, WallpaperManager.FLAG_SYSTEM);
-          wm.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+          ret.put("success", true);
+          call.resolve(ret);
+          return;
         }
+
+        wm.setBitmap(bitmap, null, true, flag);
+
       } else {
-        // Compatibilidad con versiones antiguas
         wm.setBitmap(bitmap);
       }
 
@@ -56,8 +61,8 @@ public class myCustomPlugin extends Plugin {
 
     } catch (Exception e) {
       ret.put("success", false);
-      ret.put("error", e.getMessage());
-      call.resolve(ret); // 👈 usamos resolve en vez de reject
+      ret.put("error", e.toString());
+      call.resolve(ret);
     }
   }
 }

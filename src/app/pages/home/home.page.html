@@ -30,7 +30,7 @@
       <ion-col size="6" *ngFor="let wall of wallpapers">
         <!-- 👉 Click abre ActionSheet con aplicar/eliminar -->
         <ion-card (click)="onWallpaperClick(wall)">
-          <img [src]="wall" alt="Wallpaper" />
+          <img [src]="wall.url" alt="Wallpaper" />
         </ion-card>
       </ion-col>
     </ion-row>
