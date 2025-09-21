@@ -1,0 +1,69 @@
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 80px; // deja espacio para el FAB
+}
+
+/* 📌 Ajusta el grid de wallpapers */
+ion-grid {
+  padding: 10px;
+}
+
+ion-row {
+  justify-content: center;
+}
+
+ion-col {
+  padding: 6px; // separación entre tarjetas
+}
+
+ion-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease-in-out;
+}
+
+ion-card:hover {
+  transform: scale(1.03);
+}
+
+ion-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover; // mantiene la proporción sin deformar
+  border-radius: 12px;
+}
+
+/* 📌 FAB principal (botón azul) */
+ion-fab-button {
+  --size: 60px; // más grande el FAB principal
+  --border-radius: 50%;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 📌 Lista de botones del FAB */
+ion-fab-list ion-fab-button {
+  --size: 55px; // más grandes los botones secundarios
+  margin-bottom: 10px; // espacio entre botones
+}
+
+/* 📌 Reubicar FAB más arriba para que no choque con la barra inferior del cell */
+ion-fab[slot="fixed"] {
+  bottom: 90px; // lo sube un poco
+  right: 20px;
+}
+
+/* 📌 Mensaje de éxito */
+.success-msg {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-10px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
