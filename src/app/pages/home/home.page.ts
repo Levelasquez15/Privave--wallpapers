@@ -7,6 +7,7 @@ import { Capacitor } from '@capacitor/core';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import MyCustomPlugin from '../../core/plugin/myCustomPlugin';
+import { ToastService } from 'src/app/core/services/toast';
 
 interface Wallpaper {
   url: string;
@@ -29,7 +30,8 @@ export class HomePage implements OnInit {
     private supabaseService: SupabaseService,
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private toast: ToastService
   ) {}
 
   async ngOnInit() {
@@ -153,23 +155,40 @@ export class HomePage implements OnInit {
   }
 
   /** Cambiar wallpaper */
-  async onSetWallpaper(url: string, type: 'home' | 'lock' | 'both' = 'home') {
-    if (!Capacitor.isNativePlatform()) {
-      alert(this.translate.instant('ALERTS.ONLY_NATIVE'));
-      return;
-    }
-
-    try {
-      const result = await MyCustomPlugin.setWallpaper({ url, type });
-      if (result.success) {
-        console.log('✅ Wallpaper cambiado con éxito');
-      } else {
-        console.error('❌ Error al cambiar wallpaper:', result.error);
-      }
-    } catch (err) {
-      console.error('❌ Excepción al cambiar wallpaper:', err);
-    }
+  /** Cambiar wallpaper */
+async onSetWallpaper(url: string, type: 'home' | 'lock' | 'both' = 'home') {
+  if (!Capacitor.isNativePlatform()) {
+    await this.toast.show(this.translate.instant('ALERTS.ONLY_NATIVE'), 2000, 'warning');
+    return;
   }
+
+  console.log('➡️ Llamando plugin setWallpaper', { url, type });
+
+  try {
+    const result = await MyCustomPlugin.setWallpaper({ url, type });
+    console.log('📌 Respuesta del plugin:', result);
+
+    if (result && result.success) {
+      await this.toast.show('✅ Wallpaper aplicado con éxito', 2000, 'success');
+    } else {
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: result?.error || 'No se pudo aplicar el wallpaper',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
+  } catch (err) {
+    console.error('❌ Excepción al llamar plugin:', err);
+    const alert = await this.alertCtrl.create({
+      header: 'Excepción',
+      message: String(err),
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+}
+
 
   /** Eliminar wallpaper */
   async onDeleteWallpaper(wallpaper: Wallpaper) {
