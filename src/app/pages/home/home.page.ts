@@ -4,6 +4,9 @@ import { AuthService } from '../../core/services/auth';
 import { SupabaseService } from '../../core/services/supabase';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
+import { ActionSheetController, AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import MyCustomPlugin from '../../core/plugin/myCustomPlugin';
 
 @Component({
   selector: 'app-home',
@@ -18,14 +21,16 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private supabaseService: SupabaseService
+    private supabaseService: SupabaseService,
+    private actionSheetCtrl: ActionSheetController,
+    private alertCtrl: AlertController,
+    private translate: TranslateService   
   ) {}
 
   async ngOnInit() {
     await this.loadWallpapers();
   }
 
-  /** Cargar wallpapers del bucket */
   async loadWallpapers() {
     try {
       const files = await this.supabaseService.listFiles('wallpapers', 'uploads');
@@ -41,7 +46,6 @@ export class HomePage implements OnInit {
     this.router.navigate(['/update-user-info'], { state: { fromHome: true } });
   }
 
-  /** Subir wallpaper desde cámara o galería (móvil) o input file (web) */
   async onAddWallpaperClick() {
     if (Capacitor.isNativePlatform()) {
       try {
@@ -49,7 +53,7 @@ export class HomePage implements OnInit {
           quality: 80,
           allowEditing: false,
           resultType: CameraResultType.Uri,
-          source: CameraSource.Prompt // 👉 Muestra opción Cámara o Galería
+          source: CameraSource.Prompt
         });
 
         const response = await fetch(image.webPath!);
@@ -66,7 +70,6 @@ export class HomePage implements OnInit {
         console.error('Error al capturar imagen:', err);
       }
     } else {
-      // 💻 Web → input file
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'image/*';
@@ -91,13 +94,86 @@ export class HomePage implements OnInit {
     }
   }
 
-  /** Cerrar sesión */
+  /** Mostrar opciones */
+  async onWallpaperClick(url: string) {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: this.translate.instant('HOME.OPTIONS'),
+      buttons: [
+        {
+          text: this.translate.instant('HOME.SET_HOME'),
+          handler: () => this.onSetWallpaper(url, 'home')
+        },
+        {
+          text: this.translate.instant('HOME.SET_LOCK'),
+          handler: () => this.onSetWallpaper(url, 'lock')
+        },
+        {
+          text: this.translate.instant('HOME.SET_BOTH'),
+          handler: () => this.onSetWallpaper(url, 'both')
+        },
+        {
+          text: this.translate.instant('HOME.DELETE'),
+          role: 'destructive',
+          handler: () => this.onDeleteWallpaper(url)
+        },
+        {
+          text: this.translate.instant('HOME.CANCEL'),
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  async onSetWallpaper(url: string, type: 'home' | 'lock' | 'both' = 'home') {
+    if (!Capacitor.isNativePlatform()) {
+      alert(this.translate.instant('ALERTS.ONLY_NATIVE')); 
+      return;
+    }
+
+    try {
+      const result = await MyCustomPlugin.setWallpaper({ url, type });
+      if (result.success) {
+        console.log('Wallpaper cambiado con éxito');
+      } else {
+        console.error('Error al cambiar wallpaper:', result.error);
+      }
+    } catch (err) {
+      console.error('Excepción al cambiar wallpaper:', err);
+    }
+  }
+
+  async onDeleteWallpaper(url: string) {
+    const alert = await this.alertCtrl.create({
+      header: this.translate.instant('HOME.DELETE_CONFIRM_TITLE'),
+      message: this.translate.instant('HOME.DELETE_CONFIRM_MSG'),
+      buttons: [
+        { text: this.translate.instant('HOME.CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('HOME.DELETE'),
+          role: 'destructive',
+          handler: async () => {
+            try {
+              const filePath = url.split('/').slice(-2).join('/');
+              await this.supabaseService.deleteFile('wallpapers', filePath);
+              this.wallpapers = this.wallpapers.filter(w => w !== url);
+            } catch (err) {
+              console.error('Error al eliminar wallpaper:', err);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   async onLogoutClick() {
     try {
       await this.authService.logout();
       this.router.navigate(['/login']);
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error(this.translate.instant('ALERTS.LOGOUT_ERROR'), error);
     }
   }
 }

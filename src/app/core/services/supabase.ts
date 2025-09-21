@@ -50,4 +50,8 @@ export class SupabaseService {
     if (error) throw error;
     return data;
   }
+  async deleteFile(bucket: string, path: string) {
+    const { error } = await this.supabase.storage.from(bucket).remove([path]);
+    if (error) throw error;
+  }
 }
