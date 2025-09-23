@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
-import { SupabaseService } from '../../core/services/supabase';
+import { UploaderService } from '../../core/services/uploader'; // ✅ reemplazo de SupabaseService
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import MyCustomPlugin from '../../core/plugin/myCustomPlugin';
 import { ToastService } from 'src/app/core/services/toast';
-import { User } from 'firebase/auth'; // 👈 importa User para tipado
+import { User } from 'firebase/auth';
 
 interface Wallpaper {
   url: string;
-  path: string; // ruta real en Supabase (ej: uploads/uid/1234.jpeg)
+  path: string;
 }
 
 @Component({
@@ -24,12 +24,12 @@ interface Wallpaper {
 export class HomePage implements OnInit {
   showSuccess = false;
   wallpapers: Wallpaper[] = [];
-  private uid: string | null = null; // 👈 guardamos el UID del usuario
+  private uid: string | null = null;
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private supabaseService: SupabaseService,
+    private uploaderService: UploaderService, // ✅ cambio principal
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
     private translate: TranslateService,
@@ -45,31 +45,18 @@ export class HomePage implements OnInit {
       return;
     }
 
-    this.uid = user.uid; // 👈 guardamos UID del usuario logueado
+    this.uid = user.uid;
     await this.loadWallpapers();
   }
 
-  /** Cargar wallpapers SOLO del usuario actual */
+  /** Cargar wallpapers del usuario actual */
   async loadWallpapers() {
-    if (!this.uid) return;
-
     try {
-      console.log(`📂 Listando archivos en bucket: wallpapers, carpeta: uploads/${this.uid}`);
-      const files = await this.supabaseService.listFiles('wallpapers', `uploads/${this.uid}`);
-
-      if (!files) {
-        this.wallpapers = [];
-        return;
-      }
-
-      this.wallpapers = files.map(file => ({
-        url: this.supabaseService.getPublicUrl('wallpapers', `uploads/${this.uid}/${file.name}`),
-        path: `uploads/${this.uid}/${file.name}`
-      }));
-
-      console.log("✅ Archivos encontrados:", this.wallpapers);
+      this.wallpapers = await this.uploaderService.getUserWallpapers();
+      console.log("✅ Wallpapers cargados:", this.wallpapers);
     } catch (err) {
       console.error('❌ Error al cargar wallpapers:', err);
+      this.wallpapers = [];
     }
   }
 
@@ -86,9 +73,8 @@ export class HomePage implements OnInit {
     }
   }
 
+  /** Captura desde cámara o galería */
   private async captureWithCamera() {
-    if (!this.uid) return;
-
     try {
       const image = await Camera.getPhoto({
         quality: 80,
@@ -99,20 +85,18 @@ export class HomePage implements OnInit {
 
       const response = await fetch(image.webPath!);
       const blob = await response.blob();
-      const filePath = `uploads/${this.uid}/${Date.now()}.jpeg`; // 👈 carpeta por usuario
 
-      await this.supabaseService.uploadImage('wallpapers', filePath, blob);
-      const publicUrl = this.supabaseService.getPublicUrl('wallpapers', filePath);
-
-      this.addWallpaper(publicUrl, filePath);
+      // ✅ usar uploaderService
+      const result = await this.uploaderService.uploadWallpaper(blob);
+      this.addWallpaper(result.url, result.path);
     } catch (err) {
       console.error('❌ Error al capturar imagen:', err);
+      await this.toast.show('Error al subir imagen', 3000, 'danger');
     }
   }
 
+  /** Subir desde input file */
   private pickFromFileInput() {
-    if (!this.uid) return;
-
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -123,13 +107,11 @@ export class HomePage implements OnInit {
       if (!file) return;
 
       try {
-        const filePath = `uploads/${this.uid}/${Date.now()}-${file.name}`; // 👈 carpeta por usuario
-        await this.supabaseService.uploadImage('wallpapers', filePath, file);
-        const publicUrl = this.supabaseService.getPublicUrl('wallpapers', filePath);
-
-        this.addWallpaper(publicUrl, filePath);
+        const result = await this.uploaderService.uploadWallpaper(file, file.name);
+        this.addWallpaper(result.url, result.path);
       } catch (err) {
         console.error('❌ Error al subir imagen:', err);
+        await this.toast.show('Error al subir imagen', 3000, 'danger');
       }
     };
   }
@@ -140,7 +122,7 @@ export class HomePage implements OnInit {
     setTimeout(() => (this.showSuccess = false), 2000);
   }
 
-  /** Mostrar menú de opciones */
+  /** Menú de opciones */
   async onWallpaperClick(wallpaper: Wallpaper) {
     const actionSheet = await this.actionSheetCtrl.create({
       header: this.translate.instant('HOME.OPTIONS'),
@@ -185,11 +167,11 @@ export class HomePage implements OnInit {
       console.log('📌 Respuesta del plugin:', result);
 
       if (result && result.success) {
-        await this.toast.show('✅ Wallpaper aplicado con éxito', 2000, 'success');
+        await this.toast.show(this.translate.instant('ALERTS.WALLPAPER_SUCCESS'), 2000, 'success');
       } else {
         const alert = await this.alertCtrl.create({
-          header: 'Error',
-          message: result?.error || 'No se pudo aplicar el wallpaper',
+          header: this.translate.instant('COMMON.ERROR'),
+          message: result?.error || this.translate.instant('ALERTS.WALLPAPER_ERROR'),
           buttons: ['OK']
         });
         await alert.present();
@@ -197,7 +179,7 @@ export class HomePage implements OnInit {
     } catch (err) {
       console.error('❌ Excepción al llamar plugin:', err);
       const alert = await this.alertCtrl.create({
-        header: 'Excepción',
+        header: this.translate.instant('COMMON.ERROR'),
         message: String(err),
         buttons: ['OK']
       });
@@ -217,14 +199,11 @@ export class HomePage implements OnInit {
           role: 'destructive',
           handler: async () => {
             try {
-              console.log("🗑 Eliminando:", wallpaper.path);
-              await this.supabaseService.deleteFile('wallpapers', wallpaper.path);
-              console.log("✅ Archivo eliminado correctamente:", wallpaper.path);
-
-              // 🔄 Recargar lista para asegurar que no reaparezca
+              await this.uploaderService.deleteWallpaper(wallpaper.path);
               await this.loadWallpapers();
             } catch (err) {
               console.error('❌ Error al eliminar wallpaper:', err);
+              await this.toast.show('Error al eliminar wallpaper', 3000, 'danger');
             }
           }
         }
