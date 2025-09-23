@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, doc, setDoc, updateDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, setDoc, updateDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class Query {
   async create(collectionName: string, data: any) {
     try {
       const docRef = doc(this.fireSt, `${collectionName}/${data.uid}`);
-      await setDoc(docRef, data);
+      await setDoc(docRef, data, { merge: true }); // 🔹 merge evita sobreescribir
       console.log('✅ Documento creado con UID:', data.uid);
       return docRef;
     } catch (error) {
@@ -28,7 +28,7 @@ export class Query {
     const uid = this.auth.currentUser?.uid || data.uid;
     if (!uid) throw new Error('No hay UID de usuario');
     const userRef = doc(this.fireSt, `users/${uid}`);
-    return updateDoc(userRef, data);
+    return setDoc(userRef, data, { merge: true }); // 🔹 usamos setDoc con merge
   }
 
   // Obtener datos de usuario
@@ -39,4 +39,17 @@ export class Query {
     console.log('📄 getUser Firestore:', data);
     return data;
   }
+
+  // Eliminar usuario en Firestore
+  async deleteUser(uid: string) {
+    try {
+      const userRef = doc(this.fireSt, `users/${uid}`);
+      await deleteDoc(userRef);
+      console.log(`🗑️ Usuario con UID ${uid} eliminado de Firestore`);
+    } catch (error) {
+      console.error('❌ Error al eliminar usuario:', error);
+      throw error;
+    }
+  }
 }
+

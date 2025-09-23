@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-link',
@@ -6,11 +6,8 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./link.component.scss'],
   standalone: false
 })
-export class LinkComponent implements OnInit {
+export class LinkComponent {
   @Input() text: string = '';
-  @Input() routerLink: any[] = [];
-
-  constructor() { }
-
-  ngOnInit() {}
+  @Input() href?: string;
+  @Input() routerLink?: any[] | string;
 }

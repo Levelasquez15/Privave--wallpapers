@@ -1,3 +1,5 @@
-<p>
-  card works!
-</p>
+<div class="card">
+  <h3 *ngIf="title">{{ title }}</h3>
+  <p *ngIf="content">{{ content }}</p>
+  <ng-content></ng-content>
+</div>

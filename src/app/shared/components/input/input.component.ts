@@ -1,18 +1,52 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { Component, forwardRef, Input } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  standalone:false
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true
+    }
+  ],
+  standalone: false
 })
-export class InputComponent implements OnInit {
-  @Input() label: string = '';
+export class InputComponent implements ControlValueAccessor {
   @Input() type: string = 'text';
-  @Input() formControl!: AbstractControl;
+  @Input() placeholder: string = '';
+  @Input() label?: string;
+  @Input() disabled: boolean = false;
 
-  constructor() {}
+  value: any = '';
 
-  ngOnInit() {}
+  onChange: any = () => {};
+  onTouched: any = () => {};
+
+  writeValue(value: any): void {
+    this.value = value;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  onInput(event: any) {
+    this.value = event.target.value;
+    this.onChange(this.value);
+  }
+
+  onBlur() {
+    this.onTouched();
+  }
 }

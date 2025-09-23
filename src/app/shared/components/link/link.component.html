@@ -1,3 +1,7 @@
-<a [routerLink]="routerLink" class="custom-link">
+<a *ngIf="href && !routerLink" [href]="href" class="custom-link">
+  {{ text }}
+</a>
+
+<a *ngIf="routerLink" [routerLink]="routerLink" class="custom-link">
   {{ text }}
 </a>

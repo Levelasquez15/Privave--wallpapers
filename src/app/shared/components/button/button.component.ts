@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -6,12 +6,10 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./button.component.scss'],
   standalone: false
 })
-export class ButtonComponent implements OnInit {
-  @Input() text: string = '';
-  @Input() type: string = 'button';
+export class ButtonComponent {
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+  @Input() expand?: string;
+  @Input() color?: string;
   @Input() disabled: boolean = false;
-
-  constructor() {}
-
-  ngOnInit() {}
+  @Input() label?: string;
 }

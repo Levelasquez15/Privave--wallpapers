@@ -1,38 +1,45 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Importa tus componentes
-import { InputComponent } from './components/input/input.component';
-import { ButtonComponent } from './components/button/button.component';
-import { LinkComponent } from './components/link/link.component';
-import { ToggleTranslateComponent } from './components/toggle-translate/toggle-translate.component';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
-import { CoreModule } from '../core/core-module';
-import { TranslateModule } from '@ngx-translate/core';
+import { ButtonModule } from './components/button/button.module';
+import { FloatingButtonModule } from './components/floating-button/floating-button.module';
+import { CardModule } from './components/card/card.module';
+import { LinkModule } from './components/link/link.module';
 
+import { TranslateModule } from '@ngx-translate/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+
+import { ToggleTranslateComponent } from './components/toggle-translate/toggle-translate.component';
+import { InputComponent } from './components/input/input.component';
 
 @NgModule({
   declarations: [
-    InputComponent,
-    ButtonComponent,
-    LinkComponent,
     ToggleTranslateComponent,
-   
+    InputComponent   // 👈 lo declaramos aquí directo
   ],
   imports: [
     CommonModule,
-    IonicModule,
-    RouterModule,
-    TranslateModule
+    ButtonModule,
+    FloatingButtonModule,
+    CardModule,
+    LinkModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule
   ],
   exports: [
-    InputComponent,
-    ButtonComponent,
-    LinkComponent,
     ToggleTranslateComponent,
-    TranslateModule
-    
+    InputComponent, // 👈 y lo exportamos
+    ButtonModule,
+    FloatingButtonModule,
+    CardModule,
+    LinkModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

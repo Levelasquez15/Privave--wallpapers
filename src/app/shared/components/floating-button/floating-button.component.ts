@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-floating-button',
@@ -7,9 +7,28 @@ import { Component, Output, EventEmitter } from '@angular/core';
   standalone: false
 })
 export class FloatingButtonComponent {
-  @Output() click = new EventEmitter<void>();
+  @Output() profileClick = new EventEmitter<void>();
+  @Output() uploadImageClick = new EventEmitter<void>();
+  @Output() logoutClick = new EventEmitter<void>();
 
-  onClick() {
-    this.click.emit();
+  isOpen = false;
+
+  toggleMenu() {
+    this.isOpen = !this.isOpen;  // 👈 El botón azul solo abre/cierra
+  }
+
+  onProfileClick() {
+    this.profileClick.emit();
+    this.isOpen = false;
+  }
+
+  onUploadImageClick() {
+    this.uploadImageClick.emit();
+    this.isOpen = false;
+  }
+
+  onLogoutClick() {
+    this.logoutClick.emit();
+    this.isOpen = false;
   }
 }

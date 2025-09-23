@@ -1,43 +1,17 @@
 <ion-content>
-  <div class="register-card">
-    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-      <ion-item>
-        <ion-label position="floating">{{ 'REGISTER.NAME' | translate }}</ion-label>
-        <ion-input type="text" formControlName="name"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">{{ 'REGISTER.LASTNAME' | translate }}</ion-label>
-        <ion-input type="text" formControlName="lastname"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">{{ 'REGISTER.EMAIL' | translate }}</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">{{ 'REGISTER.PASSWORD' | translate }}</ion-label>
-        <ion-input type="password" formControlName="password"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">{{ 'REGISTER.CONFIRM_PASSWORD' | translate }}</ion-label>
-        <ion-input type="password" formControlName="confirmPassword"></ion-input>
-      </ion-item>
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <app-input label="Nombre" type="text" formControlName="name"></app-input>
+    <app-input label="Apellido" type="text" formControlName="lastname"></app-input>
+    <app-input label="Correo" type="email" formControlName="email"></app-input>
+    <app-input label="Contraseña" type="password" formControlName="password"></app-input>
+    <app-input label="Confirmar Contraseña" type="password" formControlName="confirmPassword"></app-input>
 
-      <!-- Extra options con traducciones -->
-      <div class="extra-options">
-        <app-link 
-          [text]="'REGISTER.LOGIN' | translate" 
-          [routerLink]="['/login']">
-        </app-link>
-        <app-toggle-translate></app-toggle-translate>
-      </div>
+    <app-button type="submit" label="Registrarse"></app-button>
 
-      <app-button 
-        [text]="'REGISTER.BUTTON' | translate" 
-        type="submit" 
-        [disabled]="registerForm.invalid">
-      </app-button>
+    <div *ngIf="errorMsg" class="error">
+      {{ errorMsg }}
+    </div>
 
-      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
-    </form>
-  </div>
+    <app-link text="¿Ya tienes cuenta? Inicia sesión" [routerLink]="['/login']"></app-link>
+  </form>
 </ion-content>

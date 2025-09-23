@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from '@angular/fire/auth';
+import { Auth,User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from '@angular/fire/auth';
 import { inject } from '@angular/core';
 
 @Injectable({
@@ -25,6 +25,10 @@ export class AuthService {
       return updateEmail(this.auth.currentUser, newEmail);
     }
     return Promise.reject('No hay usuario autenticado');
+  }
+  
+    async getCurrentUser(): Promise<User | null> {
+    return this.auth.currentUser;
   }
 
   updatePassword(newPassword: string) {
