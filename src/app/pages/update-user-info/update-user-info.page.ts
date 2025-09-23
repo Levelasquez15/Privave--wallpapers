@@ -6,6 +6,7 @@ import { onAuthStateChanged, deleteUser } from 'firebase/auth';
 import { AuthService } from 'src/app/core/services/auth';
 import { Query } from 'src/app/core/services/query';
 import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-update-user-info',
@@ -25,7 +26,8 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
     private query: Query,
     private router: Router,
     private ngAuth: Auth,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -99,10 +101,15 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
       }
 
       this.errorMsg = '';
-      this.successMsg = '✅ Datos actualizados correctamente';
+      this.successMsg = this.translate.instant('PROFILE.UPDATE_SUCCESS');
+      
+      // Limpiar mensaje después de 3 segundos
+      setTimeout(() => {
+        this.successMsg = '';
+      }, 3000);
     } catch (err: any) {
       console.error(err);
-      this.errorMsg = err.message || 'Error al actualizar';
+      this.errorMsg = err.message || this.translate.instant('PROFILE.UPDATE_ERROR');
     }
   }
 
@@ -112,15 +119,15 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
 
   async onDeleteAccount() {
     const alert = await this.alertController.create({
-      header: 'Eliminar cuenta',
-      message: '¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.',
+      header: this.translate.instant('PROFILE.DELETE_CONFIRM_TITLE'),
+      message: this.translate.instant('PROFILE.DELETE_CONFIRM_MESSAGE'),
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.translate.instant('PROFILE.CANCEL'),
           role: 'cancel'
         },
         {
-          text: 'Eliminar',
+          text: this.translate.instant('PROFILE.DELETE'),
           role: 'destructive',
           handler: async () => {
             try {
@@ -133,7 +140,7 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
               }
             } catch (err: any) {
               console.error(err);
-              this.errorMsg = err.message || 'Error al eliminar cuenta';
+              this.errorMsg = err.message || this.translate.instant('PROFILE.DELETE_ERROR');
             }
           }
         }

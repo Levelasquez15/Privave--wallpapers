@@ -2,7 +2,7 @@
   <!-- 🔹 Botón Home -->
   <div class="home-button">
     <app-button 
-      label="🏠" 
+      [label]="'COMMON.HOME' | translate" 
       (click)="goHome()">
     </app-button>
   </div>
@@ -11,16 +11,33 @@
   <div class="profile-card">
     <form [formGroup]="profileForm" (ngSubmit)="onUpdate()">
 
-      <app-input label="Nombre" type="text" formControlName="name"></app-input>
-      <app-input label="Apellido" type="text" formControlName="lastName"></app-input>
-      <app-input label="Correo" type="email" formControlName="email"></app-input>
+      <app-input 
+        [label]="'PROFILE.NAME' | translate" 
+        type="text" 
+        formControlName="name">
+      </app-input>
+      
+      <app-input 
+        [label]="'PROFILE.LASTNAME' | translate" 
+        type="text" 
+        formControlName="lastName">
+      </app-input>
+      
+      <app-input 
+        [label]="'PROFILE.EMAIL' | translate" 
+        type="email" 
+        formControlName="email">
+      </app-input>
 
       <!-- Toggle de traducción -->
       <div class="language-toggle">
         <app-toggle-translate></app-toggle-translate>
       </div>
 
-      <app-button type="submit" label="Actualizar"></app-button>
+      <app-button 
+        type="submit" 
+        [label]="'PROFILE.UPDATE' | translate">
+      </app-button>
 
       <div *ngIf="errorMsg" class="error">
         {{ errorMsg }}
@@ -32,7 +49,7 @@
 
     <!-- 🔹 Botón Eliminar Cuenta -->
     <app-button 
-      label="Eliminar cuenta" 
+      [label]="'PROFILE.DELETE_ACCOUNT' | translate" 
       (click)="onDeleteAccount()"
       class="delete-account">
     </app-button>

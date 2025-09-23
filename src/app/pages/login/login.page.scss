@@ -1,24 +1,46 @@
-.login-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  max-width: 400px;       
-  margin: auto;           
-  margin-top: 18vh;       
-  padding: 24px;
+.login-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --background: #f5f7fa; // color de fondo claro
 }
 
+.login-card {
+  width: 90%;
+  max-width: 400px;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  margin-top: 18vh;
+}
 
-.extra-options {
-  margin: 16px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+app-input {
+  margin-bottom: 1rem;
+  display: block;
 }
 
 app-link {
-  color: #3b82f6;
-  font-weight: 500;
-  margin-right: 8px;
+  display: block;
+  margin: 1rem 0;
+  color: #007bff;
+  text-align: center;
+}
+
+.language-toggle {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+app-button {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+  text-align: center;
 }

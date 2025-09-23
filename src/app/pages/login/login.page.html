@@ -2,16 +2,31 @@
   <div class="login-card">
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
-      <app-input label="Email" type="email" formControlName="email"></app-input>
-      <app-input label="Password" type="password" formControlName="password"></app-input>
+      <app-input 
+        [label]="'LOGIN.EMAIL' | translate" 
+        type="email" 
+        formControlName="email">
+      </app-input>
+      
+      <app-input 
+        [label]="'LOGIN.PASSWORD' | translate" 
+        type="password" 
+        formControlName="password">
+      </app-input>
 
-      <app-link text="Register here" [routerLink]="['/register']"></app-link>
+      <app-link 
+        [text]="'LOGIN.REGISTER_LINK' | translate" 
+        [routerLink]="['/register']">
+      </app-link>
 
       <div class="language-toggle">
         <app-toggle-translate></app-toggle-translate>
       </div>
 
-      <app-button type="submit" label="Sign In"></app-button>
+      <app-button 
+        type="submit" 
+        [label]="'LOGIN.SIGN_IN' | translate">
+      </app-button>
 
       <div *ngIf="errorMsg" class="error">
         {{ errorMsg }}

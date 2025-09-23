@@ -1,17 +1,53 @@
 <ion-content>
-  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-    <app-input label="Nombre" type="text" formControlName="name"></app-input>
-    <app-input label="Apellido" type="text" formControlName="lastname"></app-input>
-    <app-input label="Correo" type="email" formControlName="email"></app-input>
-    <app-input label="Contraseña" type="password" formControlName="password"></app-input>
-    <app-input label="Confirmar Contraseña" type="password" formControlName="confirmPassword"></app-input>
+  <div class="register-card">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <app-input 
+        [label]="'REGISTER.NAME' | translate" 
+        type="text" 
+        formControlName="name">
+      </app-input>
+      
+      <app-input 
+        [label]="'REGISTER.LASTNAME' | translate" 
+        type="text" 
+        formControlName="lastname">
+      </app-input>
+      
+      <app-input 
+        [label]="'REGISTER.EMAIL' | translate" 
+        type="email" 
+        formControlName="email">
+      </app-input>
+      
+      <app-input 
+        [label]="'REGISTER.PASSWORD' | translate" 
+        type="password" 
+        formControlName="password">
+      </app-input>
+      
+      <app-input 
+        [label]="'REGISTER.CONFIRM_PASSWORD' | translate" 
+        type="password" 
+        formControlName="confirmPassword">
+      </app-input>
 
-    <app-button type="submit" label="Registrarse"></app-button>
+      <div class="language-toggle">
+        <app-toggle-translate></app-toggle-translate>
+      </div>
 
-    <div *ngIf="errorMsg" class="error">
-      {{ errorMsg }}
-    </div>
+      <app-button 
+        type="submit" 
+        [label]="'REGISTER.REGISTER' | translate">
+      </app-button>
 
-    <app-link text="¿Ya tienes cuenta? Inicia sesión" [routerLink]="['/login']"></app-link>
-  </form>
+      <div *ngIf="errorMsg" class="error">
+        {{ errorMsg }}
+      </div>
+
+      <app-link 
+        [text]="'REGISTER.LOGIN_LINK' | translate" 
+        [routerLink]="['/login']">
+      </app-link>
+    </form>
+  </div>
 </ion-content>
