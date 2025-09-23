@@ -14,7 +14,7 @@ export class FloatingButtonComponent {
   isOpen = false;
 
   toggleMenu() {
-    this.isOpen = !this.isOpen;  // 👈 El botón azul solo abre/cierra
+    this.isOpen = !this.isOpen;  
   }
 
   onProfileClick() {

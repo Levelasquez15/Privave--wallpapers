@@ -7,7 +7,7 @@
     </app-button>
   </div>
 
-  <!-- 🔹 Card de perfil -->
+  
   <div class="profile-card">
     <form [formGroup]="profileForm" (ngSubmit)="onUpdate()">
 
@@ -29,7 +29,7 @@
         formControlName="email">
       </app-input>
 
-      <!-- Toggle de traducción -->
+      
       <div class="language-toggle">
         <app-toggle-translate></app-toggle-translate>
       </div>
@@ -47,7 +47,6 @@
       </div>
     </form>
 
-    <!-- 🔹 Botón Eliminar Cuenta -->
     <app-button 
       [label]="'PROFILE.DELETE_ACCOUNT' | translate" 
       (click)="onDeleteAccount()"

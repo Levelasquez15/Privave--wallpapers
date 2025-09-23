@@ -49,7 +49,7 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
             email: user.email ?? userDoc['email'] ?? ''
           });
 
-          // 🔹 Corrige email si no coincide
+          
           if (user.email && userDoc['email'] !== user.email) {
             await this.query.updateUser({ uid: user.uid, email: user.email });
           }
@@ -85,7 +85,7 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
   }
 
   async onUpdate() {
-    const { name, lastName } = this.profileForm.getRawValue(); // 🔹 getRawValue para leer email aunque esté disabled
+    const { name, lastName } = this.profileForm.getRawValue(); 
 
     try {
       const user = this.ngAuth.currentUser;
@@ -94,7 +94,7 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
         const userData = {
           name,
           lastName,
-          email: user.email, // 🔹 siempre usamos el email real
+          email: user.email, 
           uid: user.uid
         };
         await this.query.updateUser(userData);
@@ -103,7 +103,7 @@ export class UpdateUserInfoPage implements OnInit, OnDestroy {
       this.errorMsg = '';
       this.successMsg = this.translate.instant('PROFILE.UPDATE_SUCCESS');
       
-      // Limpiar mensaje después de 3 segundos
+      
       setTimeout(() => {
         this.successMsg = '';
       }, 3000);

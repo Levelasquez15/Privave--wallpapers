@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  --background: #f5f7fa; // color de fondo claro
+  --background: #f5f7fa; 
 }
 
 .login-card {
@@ -42,41 +42,39 @@ app-button {
   margin-top: 1rem;
   text-align: center;
 }
-/* 🔹 Controlar el espacio interno del contenido */
+
 ion-content {
   --padding-start: 16px;
   --padding-end: 16px;
-  --padding-top: 24px;    /* ⬆️ más espacio arriba */
-  --padding-bottom: 100px; /* ⬇️ más espacio abajo (para no chocar con el FAB) */
+  --padding-top: 24px;    
+  --padding-bottom: 100px; 
 }
 
-/* 🔹 Espaciado entre columnas */
 ion-col {
   padding: 10px;
 }
 
-/* 🔹 Imagen dentro del card */
+
 app-card img {
   width: 100%;
-  height: 200px; /* ⬆️ un poco más grandes */
+  height: 200px; 
   object-fit: cover;
   border-radius: 18px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   display: block;
 }
 
-/* 🔹 FAB separado del borde */
+
 app-floating-button {
   position: fixed;
-  bottom: 32px;  /* ⬇️ más espacio desde abajo */
-  right: 24px;   /* ⬅️ más espacio desde el borde derecho */
+  bottom: 32px;  
+  right: 24px;   
   z-index: 1000;
 }
 
-/* 🔹 Mensaje de éxito centrado arriba del FAB */
 .success-msg {
   position: fixed;
-  bottom: 110px;  /* ⬆️ más separado del FAB */
+  bottom: 110px;  
   left: 50%;
   transform: translateX(-50%);
   background: #4caf50;

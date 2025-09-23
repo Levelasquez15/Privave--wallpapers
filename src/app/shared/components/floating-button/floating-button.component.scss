@@ -1,28 +1,26 @@
 /* 🔹 FAB principal */
 ion-fab-button {
-  --background: #1976d2;   /* Azul principal */
-  --color: #ffffff;        /* Icono blanco */
+  --background: #1976d2;   
+  --color: #ffffff;        
   --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   --border-radius: 50%;
   width: 56px;
   height: 56px;
 }
 
-/* 🔹 FABs secundarios (del menú) */
 ion-fab-list ion-fab-button {
-  --background: #ffffff;     /* Fondo blanco */
-  --color: #1976d2;          /* Icono azul */
+  --background: #ffffff;     
+  --color: #1976d2;          
   --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   width: 48px;
   height: 48px;
 
-  /* ✅ Borde con variables de Ionic en lugar de border directo */
   --border-color: #1976d2;
   --border-style: solid;
   --border-width: 2px;
 }
 
-/* 🔹 Hover / Active para dar feedback */
+
 ion-fab-list ion-fab-button:hover {
   --background: #1976d2;
   --color: #ffffff;
@@ -30,7 +28,7 @@ ion-fab-list ion-fab-button:hover {
   transition: all 0.2s ease-in-out;
 }
 
-/* ✅ Evitar recuadro azul de enfoque */
+
 ion-fab-button:focus,
 ion-fab-button:focus-visible {
   outline: none !important;

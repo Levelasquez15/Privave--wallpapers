@@ -16,7 +16,7 @@ import { InputComponent } from './components/input/input.component';
 @NgModule({
   declarations: [
     ToggleTranslateComponent,
-    InputComponent   // 👈 lo declaramos aquí directo
+    InputComponent   
   ],
   imports: [
     CommonModule,
@@ -31,7 +31,7 @@ import { InputComponent } from './components/input/input.component';
   ],
   exports: [
     ToggleTranslateComponent,
-    InputComponent, // 👈 y lo exportamos
+    InputComponent, 
     ButtonModule,
     FloatingButtonModule,
     CardModule,

@@ -1,22 +1,22 @@
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <!-- FAB principal -->
+
   <ion-fab-button (click)="toggleMenu()">
     <ion-icon [name]="isOpen ? 'close' : 'add'"></ion-icon>
   </ion-fab-button>
 
-  <!-- Menú desplegable -->
+  
   <ion-fab-list side="top" *ngIf="isOpen">
-    <!-- Botón Perfil -->
+    
     <ion-fab-button color="primary" (click)="onProfileClick()">
       <ion-icon name="person-circle-outline"></ion-icon>
     </ion-fab-button>
 
-    <!-- Botón Subir Imagen -->
+   
     <ion-fab-button color="secondary" (click)="onUploadImageClick()">
       <ion-icon name="images-outline"></ion-icon>
     </ion-fab-button>
 
-    <!-- Botón Cerrar Sesión -->
+    
     <ion-fab-button color="danger" (click)="onLogoutClick()">
       <ion-icon name="log-out-outline"></ion-icon>
     </ion-fab-button>

@@ -16,7 +16,7 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService, // <-- corregido
+    private auth: AuthService, 
     private query: Query,
     private router: Router
   ) {}
@@ -34,7 +34,7 @@ export class RegisterPage implements OnInit {
   onRegister() {
     const { email, password, name, lastname } = this.registerForm.value;
     this.auth.register(email, password)
-      .then((res: any) => { // <-- tipo agregado
+      .then((res: any) => { 
         if (res.user) {
           const userData = {
             name,
@@ -45,16 +45,16 @@ export class RegisterPage implements OnInit {
           this.query.create('users', userData)
             .then(() => {
               this.router.navigate(['/home']);
-              // Usuario guardado en Firestore
+              
             })
-            .catch((err: any) => { // <-- tipo agregado
+            .catch((err: any) => { 
               this.errorMsg = 'Error al guardar usuario en Firestore';
             });
         } else {
           this.errorMsg = 'No se pudo obtener el usuario registrado.';
         }
       })
-      .catch((err: any) => { // <-- tipo agregado
+      .catch((err: any) => { 
         this.errorMsg = err.message;
       });
   }

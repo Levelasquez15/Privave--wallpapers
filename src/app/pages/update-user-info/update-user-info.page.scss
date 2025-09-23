@@ -1,22 +1,21 @@
-/* Contenedor principal */
+
 .profile-content {
   display: flex;
-  justify-content: center;   /* centra horizontal */
-  align-items: center;       /* centra vertical */
-  height: 100vh;             /* ocupa toda la pantalla */
+  justify-content: center;   
+  align-items: center;       
+  height: 100vh;             
   background: #f9f9f9;
-  position: relative;        /* para botón home */
+  position: relative;        
   padding: 20px;
 }
 
-/* Botón Home arriba a la izquierda */
+
 .home-button {
   position: absolute;
   top: 16px;
   left: 16px;
 }
 
-/* Card */
 .profile-card {
   width: 100%;
   max-width: 380px;
@@ -25,25 +24,22 @@
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 
-  /* 🔹 Baja el card un poco (ajusta este valor) */
+ 
   transform: translateY(80px);
 }
 
 
-/* Inputs */
 app-input {
   display: block;
   margin-bottom: 16px;
 }
 
-/* Botones */
 app-button {
   display: block;
   width: 100%;
   margin-top: 12px;
 }
 
-/* Botón rojo limpio */
 .delete-account {
   --background: #e53935 !important;
   --color: #fff !important;
